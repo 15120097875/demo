@@ -111,7 +111,7 @@ public class test {
         textMap.put("applyInfo","原告：sheihsie ,住所地：\n"+"原告：sheihsie ,住所地：\n");
         textMap.put("receiveInfo","被告：sheihsie ,住所地：\n"+"被告：sheihsie ,住所地：\n");
         //根据word模版生成新的
-        String pdfUrl = WorderToNewWordUtils.createWord(null, textMap, piMap, null);
+//        String pdfUrl = WorderToNewWordUtils.createWord(null, textMap, piMap, null);
 
 //        String startstr = StrUtil.removeSuffix(str,"大米");
 //        System.out.print(startstr);
