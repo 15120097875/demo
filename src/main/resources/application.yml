@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+ip: 127.0.0.1
+
+spring:
+  application:
+    name: @artifactId@
+  datasource:
+    url: jdbc:mysql://${ip}:3306/demo?zeroDateTimeBehavior=convertToNull&autoReconnect=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    username: root
+    password: root
+
+  # ========================= Redis ==========================
+  redis:
+    host: ${ip}
+    port: 6379
