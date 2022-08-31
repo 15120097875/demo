@@ -1,22 +1,37 @@
 package com.mylock.demo;
 
 import cn.hutool.core.exceptions.ValidateException;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.google.common.base.Stopwatch;
 import com.mylock.constant.GlobalConstant;
+import com.mylock.dto.shanghai.*;
+import com.mylock.entity.Aj;
 import com.mylock.entity.Store;
+import com.mylock.util.MaskingUtil;
 import com.mylock.util.WorderToNewWordUtils;
+import org.springframework.util.StopWatch;
 
 import javax.xml.bind.ValidationException;
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 /**
  * @author chaihao
  */
 public class test {
+
     public static void main(String[] args) throws Exception {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
         ArrayList<String> descriptions = new ArrayList<String>();
         descriptions.add("是一个好人");
         descriptions.add(new String("ceshi"));
@@ -110,10 +125,181 @@ public class test {
 
         textMap.put("applyInfo","原告：sheihsie ,住所地：\n"+"原告：sheihsie ,住所地：\n");
         textMap.put("receiveInfo","被告：sheihsie ,住所地：\n"+"被告：sheihsie ,住所地：\n");
+//        ThreadUtil.execAsync(() -> WorderToNewWordUtils.createWord(null, textMap, piMap, null));
         //根据word模版生成新的
-        String pdfUrl = WorderToNewWordUtils.createWord(null, textMap, piMap, null);
+//        String pdfUrl = WorderToNewWordUtils.createWord(null, textMap, piMap, null);
+        System.out.println(MaskingUtil.phoneBase64("2021/12/31/record/14767599939225477138.弱网测试.pdf"));
+        System.out.println(MaskingUtil.phoneBase64("2021/12/31/video/1476759993922547713d2b88165ad53c8eb747e1b4a3f31dbe1.mp4"));
 
-//        String startstr = StrUtil.removeSuffix(str,"大米");
+        System.out.println(MaskingUtil.testEnc("2021/12/31/record/14767599939225477138.弱网测试.pdf"));
+        System.out.println(MaskingUtil.testEnc("2021/12/31/video/1476759993922547713d2b88165ad53c8eb747e1b4a3f31dbe1.mp4"));
+        System.out.println(MaskingUtil.testDec("J1Ss1I1bLD/6awOIVgt//i+WZHzJn7zjwB+byvA34I4EnV54DD3Hvi40e+F4B+130nyE6rHnuQ=="));
+        //        String startstr = StrUtil.removeSuffix(str,"大米");
 //        System.out.print(startstr);
+
+
+
+/*        String caseListstr="[{\"accuserName\":\"招行银行西二旗分行贷款部,张代代\",\"accusedName\":\"\",\"caseTypeName\":\"金融借款合同纠纷\",\"caseTypeId\":\"12\",\"mediatorName\":null,\"allocateTime\":\"2021-12-23 10:06:01\",\"targetAmount\":\"25578.51\",\"caseInfoId\":\"1473837264598851585\",\"courtName\":\"上海市黄浦区人民法院\",\"courtCode\":\"223000\",\"orgInfoName\":\"上海高院\",\"orgInfoId\":\"20\",\"partyList\":[{\"name\":\"招行银行西二旗分行贷款部\",\"category\":\"1\",\"type\":\"2\",\"phone\":\"18912121212\",\"cardType\":\"居民身份证\",\"cardNo\":\"110101199003076499\",\"state\":\"中国\",\"nationality\":\"汉\",\"address\":\"北京海淀西二旗盈创２０２９室\",\"email\":\"18912121212@qq.com\",\"sex\":\"男\",\"birthday\":\"1990-03-07\",\"age\":\"22\",\"uscc\":\"568061893001\",\"legalRepresentative\":\"张招商\",\"legalRepresentativeDuty\":\"法定代表人职务\",\"permanentResidenceAddress\":\"北京东城\",\"agentList\":[{\"name\":\"招行银行西二旗分行贷款部\",\"cardType\":\"居民身份证\",\"cardNo\":\"110101199009073117\",\"phone\":\"13333117117\",\"email\":\"13333117117@qq.com\",\"address\":\"桥头堡\",\"sex\":\"男\"}]},{\"name\":\"张代代\",\"category\":\"1\",\"type\":\"1\",\"phone\":\"18934343434\",\"cardType\":\"居民身份证\",\"cardNo\":\"110101199003073474\",\"state\":\"中国\",\"nationality\":\"汉\",\"address\":\"北京海淀北京路腾飞大厦２０２９室\",\"email\":\"18934343434@qq.com\",\"sex\":\"男\",\"birthday\":\"1991-01-01\",\"age\":\"22\",\"uscc\":\"\",\"legalRepresentative\":\"\",\"legalRepresentativeDuty\":\"\",\"permanentResidenceAddress\":\"北京西城\",\"agentList\":[]}],\"tradeInfoId\":1473837264598851586,\"totalInterest\":\"881.93\",\"totalLoanPrincipal\":\"18967.61\",\"totalPenaltyInterest\":\"1679.42\",\"installmentFees\":\"4049.55\",\"sadpmc\":null,\"sfgthcf\":null,\"spzt\":null,\"saspmc\":null,\"xsqk\":null}]";
+        List<BackCaseListBean> caseListBeans = JSON.parseObject(caseListstr, new TypeReference<List<BackCaseListBean>>() {});
+
+        if (ObjectUtil.isEmpty(caseListBeans)) {
+            throw new ValidateException("未查询到案件信息！");
+        }
+
+        CourtSendRequest courtSendRequest =  buildAjjbxx(caseListBeans,"4",null);
+        String job= JSONUtil.toJsonStr(courtSendRequest);
+        System.out.printf("华宇拼接数据:"+job);*/
+
+        Integer awr = getAjlx("220000-0-2140");
+        System.out.println(awr);
+
+        List<Aj> ajList = new ArrayList<>();
+        Aj aj = new Aj();
+        aj.setAh("（2022）沪02执010号");
+        aj.setRq("2022-06-23");
+        ajList.add(aj);
+        aj = new Aj();
+        aj.setAh("（2021）沪02执010号");
+        aj.setRq("2022-06-23");
+        ajList.add(aj);
+        aj = new Aj();
+        aj.setAh("（2021）沪02执010号");
+        aj.setRq("2022-05-23");
+        ajList.add(aj);
+        aj = new Aj();
+        aj.setAh("（2021）沪02执12号");
+        aj.setRq("2022-05-23");
+        ajList.add(aj);
+        aj = new Aj();
+        aj.setAh("（2021）沪02执2号");
+        aj.setRq("2022-05-23");
+        ajList.add(aj);
+        List<Aj> sorted =
+                ajList.stream().sorted(Comparator.comparing(Aj::getAh)
+                        .thenComparing(Aj::getRq))
+                        .collect(Collectors.toList());
+        System.out.println("sorted"+ sorted.toString());
+        
+        List<String> stringList = new ArrayList<>();
+        String dsrmcLike = "123";
+        if (StringUtils.isNotBlank(dsrmcLike)) {
+            stringList.add("123");
+            stringList.add("");
+//            stringList.add(null);
+            stringList.add("null");
+            if(null != stringList && stringList.size() > 0){
+                stringList = stringList.stream().filter(o -> o.contains("null")).collect(Collectors.toList());
+            }
+
+        }
+        System.out.println("stringList="+stringList);
+
+
+        List<String> hyAhxx = new ArrayList<>();
+        String errMsg = "";
+        if (StringUtils.isNotBlank(dsrmcLike)) {
+            hyAhxx.add("123");
+//            hyAhxx.add("456");
+            errMsg = "未查询到"+String.join("、",hyAhxx)+"案件，如案件确不存在，您可选择办理失败结束任务。";
+
+        }
+
+
+        String dz = "&南京路1号A101";
+        System.out.println(dz.replaceAll("&",""));
+
+
+        Integer sfhl  =1;
+        System.out.println(sfhl.equals(1));
+
+
+        stopWatch.stop();
+        System.out.println(stopWatch.prettyPrint());
+        System.out.println(stopWatch.getTotalTimeMillis());
+
+    }
+
+    public static CourtSendRequest buildAjjbxx(List<BackCaseListBean> caseListBeans,String type,UserCase userCase){
+        AJJBXX ajjbxx = new AJJBXX();
+        List<SSCL> ssclList = new ArrayList<>();
+        List<DSRXX> dsrxxList = new ArrayList<>();
+        List<DLRXX> dlrxxList = new ArrayList<>();
+        List<YHZHXX> yhzhxxList = new ArrayList<>();
+        for (BackCaseListBean caseBean : caseListBeans) {
+            ajjbxx.setSQBH("申请编号");
+            ajjbxx.setSQLX(type);
+            ajjbxx.setFYDM(caseBean.getCourtName());
+            ajjbxx.setTJZX(caseBean.getOrgInfoName());
+            ajjbxx.setTWH("调委会");
+//            ajjbxx.setTJY(userCase.getMediateName());
+            ajjbxx.setTJY(null);
+            ajjbxx.setLXFS("调解员联系方式");
+            ajjbxx.setJFLX(caseBean.getCaseTypeName());
+            ajjbxx.setSQRQ("申请日期");
+            ajjbxx.setBDJE(caseBean.getTargetAmount());
+            //可以为空
+            ajjbxx.setTJJG("调解结果");
+            ajjbxx.setSQSX("诉讼请求/申请事项");
+            //可以为空
+            ajjbxx.setZYSS("事实与理由");
+            ajjbxx.setXYNR("协议内容");
+            ajjbxx.setQRLX("来源");
+            //1-是；0-否
+            ajjbxx.setSFJSSQT("是否接受诉前调");
+        }
+        List<List<PartyBean>> collect = caseListBeans.stream().map(BackCaseListBean::getPartyList).collect(Collectors.toList());
+        for(List<PartyBean> beans : collect){
+            for(PartyBean bean : beans){
+                DSRXX dsrxx = new DSRXX();
+                dsrxx.setSQBH("申请编号");
+                dsrxx.setDSRXH(bean.getPartyNumber());
+                dsrxx.setDSRMC(bean.getName());
+                dsrxx.setDSRLB(bean.getCategory());
+                dsrxx.setDSRLX(bean.getType());
+                dsrxx.setXB(bean.getSex());
+                dsrxx.setCSRQ(bean.getBirthday());
+                dsrxx.setFDDB(bean.getLegalRepresentative());
+                dsrxx.setSFDZSD("是否电子送达");
+                dsrxx.setLXDH(bean.getPhone());
+                dsrxx.setEMAIL(bean.getEmail());
+                dsrxx.setSFZM(bean.getCardType());
+                dsrxx.setQYBH(bean.getCardNo());
+                dsrxx.setZJHM(bean.getUscc());
+                dsrxx.setGJ(bean.getState());
+                dsrxx.setMZ(bean.getNationality());
+                dsrxx.setDZ(bean.getAddress());
+                dsrxxList.add(dsrxx);
+                if (ObjectUtil.isNotEmpty(bean.getAgentList())){
+                    for (AgentBean agentBean : bean.getAgentList()) {
+                        DLRXX dlrxx = new DLRXX();
+                        dlrxx.setSQBH("申请编号");
+                        dlrxx.setDSRXH(agentBean.getPartyNumber());
+                        dlrxx.setDLRXH("代理人序号");
+                        dlrxx.setDLRMC(agentBean.getName());
+                        dlrxx.setXB(agentBean.getSex());
+                        dlrxx.setSFDZSD("是否电子送达");
+                        dlrxx.setLXDH(agentBean.getPhone());
+                        dlrxx.setEMAIL(agentBean.getEmail());
+                        dlrxx.setSFZM(agentBean.getCardType());
+                        dlrxx.setZJHM(agentBean.getCardNo());
+                        dlrxx.setDZ(agentBean.getAddress());
+                        dlrxxList.add(dlrxx);
+                    }
+                }
+            }
+        }
+        dlrxxList.stream().distinct().collect(Collectors.toList());
+        CourtSendRequest build = CourtSendRequest.builder().SSCL(ssclList).DSRXX(dsrxxList).DLRXX(dlrxxList).AJJBXX(ajjbxx).YHZHXX(yhzhxxList).build();
+
+        return  build;
+    }
+    private static  Integer getAjlx(String ajzh) {
+        Integer ajlx = null;
+        if (ajzh.matches("\\w{6}-(0|100)-(53|2140|290)$")) {//首次执行
+            ajlx = 1002;
+        } else if (ajzh.matches("\\w{6}-(0|100)-(220|2141|553)$")) {//恢复执行
+            ajlx = 1003;
+        }
+        return ajlx;
     }
 }
