@@ -16,7 +16,8 @@ public class XDocReport {
     public static void main(String[] args) throws Exception {
         String outPath = "D:\\多合同调解协议11.docx";
 //        String outPath = "C:\\Users\\良卿卿\\Desktop\\金桥后的桌面上无用东西\\金桥调解协议书\\多合同调解协议最终版本1.0.docx";
-        wordConverterToPdf(outPath, outPath.replace("docx", "pdf"), "C:/Windows/Fonts/simhei.ttf", BaseFont.IDENTITY_H);
+//        wordConverterToPdf(outPath, outPath.replace("docx", "pdf"), "C:/Windows/Fonts/simhei.ttf", BaseFont.IDENTITY_H);
+        wordConverterToPdf(outPath, outPath.replace("docx", "pdf"), null, null);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.mylock.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
+//import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class Store  extends Model<Store> {
      * 商品id
      */
     @NotNull(message = "商品id不能为空")
-    @TableId
+//    @TableId
     Integer pid;
 
     /**

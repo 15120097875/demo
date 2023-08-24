@@ -1,16 +1,12 @@
 package com.mylock.demo;
 
-import cn.hutool.core.exceptions.ValidateException;
-import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.google.common.base.Stopwatch;
 import com.mylock.constant.GlobalConstant;
+import com.mylock.dto.StatisticsGroupCourtDto;
 import com.mylock.dto.shanghai.*;
 import com.mylock.entity.Aj;
 import com.mylock.entity.Store;
@@ -18,16 +14,20 @@ import com.mylock.util.MaskingUtil;
 import com.mylock.util.WorderToNewWordUtils;
 import org.springframework.util.StopWatch;
 
-import javax.xml.bind.ValidationException;
-import java.io.File;
+import java.io.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * @author chaihao
  */
 public class test {
+    private static String templatePath;
 
     public static void main(String[] args) throws Exception {
         StopWatch stopWatch = new StopWatch();
@@ -36,8 +36,30 @@ public class test {
         descriptions.add("是一个好人");
         descriptions.add(new String("ceshi"));
 
+        DateTime dateTime = DateUtil.parse("2023-01-18");
+        System.out.println(dateTime);
+
+        String chineseDate = DateUtil.formatChineseDate(new Date(), true, false);
+        System.out.println(chineseDate);
+
+
+
         ArrayList<String> descriptions2 = descriptions;
 
+        Double c=2997924583.11;//光速
+        String format = NumberUtil.decimalFormat("##,###", c);//299,792,458
+        System.out.println(format);
+
+        String smart = "122222221122.33";
+        NumberFormat numberFormat1 = NumberFormat.getNumberInstance();
+        smart = numberFormat1.format(Double.parseDouble(smart));
+        System.out.println("smart = "+ smart);
+
+        //将一个可能包含千分位的数字转换为不含千分位的形式：
+        String amount1 = "221,122.33";
+        double d1 = new DecimalFormat().parse(amount1).doubleValue(); //这里使用的是parse，不是format
+        System.out.println(String.valueOf(d1)); //结果是13000.0
+        //克隆list
         ArrayList<String> descriptionscopy = ObjectUtil.cloneByStream(descriptions);
 
         ArrayList<String> descriptionsfuzhi = new ArrayList<>();
@@ -127,7 +149,7 @@ public class test {
         textMap.put("receiveInfo","被告：sheihsie ,住所地：\n"+"被告：sheihsie ,住所地：\n");
 //        ThreadUtil.execAsync(() -> WorderToNewWordUtils.createWord(null, textMap, piMap, null));
         //根据word模版生成新的
-//        String pdfUrl = WorderToNewWordUtils.createWord(null, textMap, piMap, null);
+        String pdfUrl = WorderToNewWordUtils.createWord(null, textMap, piMap, null);
         System.out.println(MaskingUtil.phoneBase64("2021/12/31/record/14767599939225477138.弱网测试.pdf"));
         System.out.println(MaskingUtil.phoneBase64("2021/12/31/video/1476759993922547713d2b88165ad53c8eb747e1b4a3f31dbe1.mp4"));
 
@@ -182,7 +204,7 @@ public class test {
         
         List<String> stringList = new ArrayList<>();
         String dsrmcLike = "123";
-        if (StringUtils.isNotBlank(dsrmcLike)) {
+        if (StrUtil.isNotBlank(dsrmcLike)) {
             stringList.add("123");
             stringList.add("");
 //            stringList.add(null);
@@ -197,7 +219,7 @@ public class test {
 
         List<String> hyAhxx = new ArrayList<>();
         String errMsg = "";
-        if (StringUtils.isNotBlank(dsrmcLike)) {
+        if (StrUtil.isNotBlank(dsrmcLike)) {
             hyAhxx.add("123");
 //            hyAhxx.add("456");
             errMsg = "未查询到"+String.join("、",hyAhxx)+"案件，如案件确不存在，您可选择办理失败结束任务。";
@@ -216,6 +238,66 @@ public class test {
         stopWatch.stop();
         System.out.println(stopWatch.prettyPrint());
         System.out.println(stopWatch.getTotalTimeMillis());
+
+        System.out.println(getTemplatePath());
+
+//        Integer tn = 5;
+//        Integer nu = 3;
+//        float i = (float) tn / nu;
+//        System.out.println(i);
+//        int b = Math.round(i);
+//        System.out.println(b);
+
+        List<StatisticsGroupCourtDto> moneyNumberList = new ArrayList<>();
+        StatisticsGroupCourtDto courtDto1 = new StatisticsGroupCourtDto();
+        courtDto1.setPriceCount(2L);
+        StatisticsGroupCourtDto courtDto2 = new StatisticsGroupCourtDto();
+        courtDto2.setPriceCount(33L);
+        StatisticsGroupCourtDto courtDto3 = new StatisticsGroupCourtDto();
+        moneyNumberList.add(courtDto1);
+        moneyNumberList.add(courtDto2);
+        moneyNumberList.add(courtDto3);
+//        moneyNumberList.stream().filter(d -> d.getPriceCount() != null).sorted((s1, s2) -> s1.getPriceCount().compareTo(s2.getPriceCount())).collect(Collectors.toList());
+        moneyNumberList = moneyNumberList.stream().filter(d -> d.getPriceCount() != null).sorted(Comparator.comparing(StatisticsGroupCourtDto::getPriceCount).reversed()).collect(Collectors.toList());
+//        moneyNumberList.sort((s1, s2) -> s1.getPriceCount().compareTo(s2.getPriceCount()));
+        System.out.println(moneyNumberList);
+
+
+        //冒泡排序
+        int[] arr = new int[] { 2000, 400, 30, 100,50,60 };
+
+        int condition = arr.length-1;
+        for (int i = 0; i < condition; i++){
+            for(int j = 0; j < condition-i; j++){
+                if(arr[j]>arr[j+1]){
+                    int temp = arr[j + 1];
+                    arr[j + 1] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+        }
+
+        for (int i = 0; i < arr.length; i++)
+        {
+            System.out.print(arr[i] + " ");
+        }
+
+
+        int i2=2;
+        i2++;
+        System.out.println(i2);
+
+
+        if("2017/01/01".compareTo("2017/01/02") > 0){
+//            System.out.println("2007/12/10");
+        }
+        Date xyksjjzr = DateUtil.parse("2017/01/01");
+        System.out.println(DateUtil.format(DateUtil.offsetDay(xyksjjzr, -1), "yyyy/MM/dd"));
+
+
+        String goalPath ="D:\\ecf\\test.zip";
+        String tempPath ="D:\\ecf";
+        unzip(goalPath,tempPath);
 
     }
 
@@ -301,5 +383,89 @@ public class test {
             ajlx = 1003;
         }
         return ajlx;
+    }
+
+    /**
+     * 当前文件夹地址
+     * @return String
+     */
+    private static String getTemplatePath() {
+        if(StrUtil.isBlank(templatePath)) {
+            // 参数为空
+            File directory = new File("");
+            String courseFile = null;
+            try {
+                courseFile = directory.getCanonicalPath();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            templatePath = courseFile + File.separator;
+        }
+        return templatePath;
+    }
+
+    /**
+     * 解压
+     * @param zipFilePath 待解压文件的路径
+     * @param unzipFilePath 解压后的文件存储路径
+     * @throws Exception
+     */
+    public static void unzip(String zipFilePath, String unzipFilePath) throws Exception {
+        File zipFile = new File(zipFilePath);
+
+        //创建解压缩文件保存的路径
+        File unzipFileDir = new File(unzipFilePath);
+        if (!unzipFileDir.exists() || !unzipFileDir.isDirectory()) {
+            unzipFileDir.mkdirs();
+        }
+
+        //开始解压
+        ZipEntry entry = null;
+        String entryFilePath = null, entryDirPath = null;
+        File entryFile = null, entryDir = null;
+        int index = 0, count = 0;
+        byte[] buffer = new byte[1024];
+        BufferedInputStream bis = null;
+        BufferedOutputStream bos = null;
+        ZipFile zip = new ZipFile(zipFile);
+        Enumeration<ZipEntry> entries = (Enumeration<ZipEntry>)zip.entries();
+        //循环对压缩包里的每一个文件进行解压
+        while(entries.hasMoreElements()) {
+            entry = entries.nextElement();
+            //构建压缩包中一个文件解压后保存的文件全路径
+            entryFilePath = unzipFilePath + File.separator + entry.getName();
+            //构建解压后保存的文件夹路径
+            index = entryFilePath.lastIndexOf(File.separator);
+            if (index != -1) {
+                entryDirPath = entryFilePath.substring(0, index);
+            }
+            else {
+                entryDirPath = "";
+            }
+            entryDir = new File(entryDirPath);
+            //如果文件夹路径不存在，则创建文件夹
+            if (!entryDir.exists() || !entryDir.isDirectory()) {
+                entryDir.mkdirs();
+            }
+
+            //创建解压文件
+            entryFile = new File(entryFilePath);
+            if (entryFile.exists()) {
+                //检测文件是否允许删除，如果不允许删除，将会抛出SecurityException
+                SecurityManager securityManager = new SecurityManager();
+                securityManager.checkDelete(entryFilePath);
+                //删除已存在的目标文件
+                entryFile.delete();
+            }
+
+            //写入文件
+            bos = new BufferedOutputStream(new FileOutputStream(entryFile));
+            bis = new BufferedInputStream(zip.getInputStream(entry));
+            while ((count = bis.read(buffer, 0, 1024)) != -1) {
+                bos.write(buffer, 0, count);
+            }
+            bos.flush();
+            bos.close();
+        }
     }
 }
