@@ -19,6 +19,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.Executor;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -297,8 +299,43 @@ public class test {
 
         String goalPath ="D:\\ecf\\test.zip";
         String tempPath ="D:\\ecf";
-        unzip(goalPath,tempPath);
+//        unzip(goalPath,tempPath);
 
+        String shuzi = "证据0011 shuzi3";
+        shuzi= shuzi.substring(2);
+        // 创建一个正则表达式模式
+        Pattern pattern = Pattern.compile("[^0-9]");
+        // 创建一个匹配器对象
+        Matcher matcher = pattern.matcher(shuzi);
+        // 对目标字符串进行匹配
+        if (matcher.find()) {
+            // 获取匹配结果的起始下标
+            int startIndex = matcher.start();
+            shuzi = shuzi.substring(0,startIndex);
+            String numeric = getNumeric(shuzi);
+            System.out.println("匹配数字结果：" +numeric);
+            // 获取匹配结果的结束下标
+            int endIndex = matcher.end();
+
+            // 输出结果
+            System.out.println("匹配结果的起始下标：" + startIndex);
+            System.out.println("匹配结果的结束下标：" + endIndex);
+        } else {
+            System.out.println("未找到匹配的字符串");
+        }
+
+
+    }
+    /**
+     * 过滤非数字
+     * @param str
+     * @return
+     */
+    public static String getNumeric(String str) {
+        String regEx="[^0-9]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(str);
+        return m.replaceAll("").trim();
     }
 
     public static CourtSendRequest buildAjjbxx(List<BackCaseListBean> caseListBeans,String type,UserCase userCase){
@@ -453,7 +490,7 @@ public class test {
             if (entryFile.exists()) {
                 //检测文件是否允许删除，如果不允许删除，将会抛出SecurityException
                 SecurityManager securityManager = new SecurityManager();
-                securityManager.checkDelete(entryFilePath);
+//                securityManager.checkDelete(entryFilePath);
                 //删除已存在的目标文件
                 entryFile.delete();
             }

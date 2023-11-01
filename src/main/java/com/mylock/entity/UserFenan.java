@@ -10,21 +10,11 @@ import java.time.LocalDate;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Aj extends Model<Aj> {
+public class UserFenan extends Model<UserFenan> {
 
-
-    /**
-     * 用户名
-     */
-    private String ah;
-
-    /**
-     * 性别
-     */
-    private String rq;
-
-    private BigDecimal waje;
-
+    private Integer caseNum;
+    private BigDecimal case_price;
+    private String userName;
 
 
 }

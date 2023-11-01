@@ -32,4 +32,10 @@ public class User  extends Model<User> {
      */
     private LocalDate birthday;
 
+    /**
+     * 比例
+     */
+    private String bl;
+
+
 }
