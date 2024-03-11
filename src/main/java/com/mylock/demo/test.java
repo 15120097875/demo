@@ -44,7 +44,12 @@ public class test {
         String chineseDate = DateUtil.formatChineseDate(new Date(), true, false);
         System.out.println(chineseDate);
 
-
+        int x = 0;
+        for(int  i= 0; i < 20; i++){
+            int index = x % 5;
+            System.out.println("%后的数"+index);
+            x++;
+        }
 
         ArrayList<String> descriptions2 = descriptions;
 
@@ -324,6 +329,16 @@ public class test {
             System.out.println("未找到匹配的字符串");
         }
 
+        Long count = 1002L;
+        long pageSize = 1000;
+        long page = count % pageSize == 0 ? (count / pageSize) : (count / pageSize + 1);
+        long pageNum;
+        for (long i = 0; i < page; i++) {
+            pageNum = pageSize * i;
+            if (i + 1 == page) {
+                pageSize = count - (pageSize * i);
+            }
+        }
 
     }
     /**

@@ -1,10 +1,5 @@
 package com.mylock.demo;
 
-import cn.hutool.core.util.ZipUtil;
-import com.spire.doc.Document;
-import net.sf.jsqlparser.statement.create.table.Index;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-
 import java.io.*;
 import java.util.Enumeration;
 import java.util.List;
@@ -228,35 +223,35 @@ public class ZipUtils {
 //        ZipUtils.unzip(goalPath,tempPath);
 //        File unzip = ZipUtil.unzip("D:\\ecf\\test.zip", "D:\\ecf");
 
-        //加载Word文档
-        Document document = new Document();
-        document.loadFromFile("D:\\ecf\\ceshi2.docx");
-
-        //获取文档中的文本保存为String
-        String text=document.getText();
-        String qianzhi = "";
-        if(text.contains("裁判如下")){
-            qianzhi = "裁判如下";
-        }
-        if(text.contains("判决如下")){
-            qianzhi = "判决如下";
-        }
-
-        String houzhi = "";
-        if(text.contains("如不服本判决")){
-            houzhi = "如不服本判决";
-        }
-        if(text.contains("若不服本判决")){
-            houzhi = "若不服本判决";
-        }
-        if(text.contains("如果不服本判决")){
-            houzhi = "如果不服本判决";
-        }
-        if(text.contains("本判决为终审判决")){
-            houzhi = "本判决为终审判决";
-        }
-        text = text.substring(text.indexOf(qianzhi),text.indexOf(houzhi));
-        System.out.println(text.substring(text.indexOf("一、")));
+//        //加载Word文档
+//        Document document = new Document();
+//        document.loadFromFile("D:\\ecf\\ceshi2.docx");
+//
+//        //获取文档中的文本保存为String
+//        String text=document.getText();
+//        String qianzhi = "";
+//        if(text.contains("裁判如下")){
+//            qianzhi = "裁判如下";
+//        }
+//        if(text.contains("判决如下")){
+//            qianzhi = "判决如下";
+//        }
+//
+//        String houzhi = "";
+//        if(text.contains("如不服本判决")){
+//            houzhi = "如不服本判决";
+//        }
+//        if(text.contains("若不服本判决")){
+//            houzhi = "若不服本判决";
+//        }
+//        if(text.contains("如果不服本判决")){
+//            houzhi = "如果不服本判决";
+//        }
+//        if(text.contains("本判决为终审判决")){
+//            houzhi = "本判决为终审判决";
+//        }
+//        text = text.substring(text.indexOf(qianzhi),text.indexOf(houzhi));
+//        System.out.println(text.substring(text.indexOf("一、")));
     }
 
 
